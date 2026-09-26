@@ -1,0 +1,13 @@
+{
+  "id": "blood-gas-normal",
+  "name": "Blood gas - normal range",
+  "analyzer_type": "blood-gas",
+  "processing_seconds": 0.2,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "pH": {"type": "range", "min": 7.36, "max": 7.44, "decimals": 2, "units": "pH", "reference_range": "7.35-7.45"},
+    "pCO2": {"type": "range", "min": 36, "max": 44, "decimals": 1, "units": "mmHg", "reference_range": "35-45"},
+    "pO2": {"type": "range", "min": 82, "max": 98, "decimals": 1, "units": "mmHg", "reference_range": "80-100"},
+    "LAC": {"type": "range", "min": 0.8, "max": 1.8, "decimals": 2, "units": "mmol/L", "reference_range": "0.5-2.2"}
+  }
+}

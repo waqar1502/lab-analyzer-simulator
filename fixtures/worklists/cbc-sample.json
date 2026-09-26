@@ -1,0 +1,16 @@
+{
+  "sample_identifier": "SAMPLE-CBC-001",
+  "order_number": "ORDER-SYNTH-001",
+  "accession_number": "ACCESSION-CBC-001",
+  "patient_id": "PATIENT-SYNTH-001",
+  "patient_name": "Synthetic Patient One",
+  "specimen": "WHOLE_BLOOD_EDTA",
+  "ordered_tests": [
+    {"code": "WBC", "name": "White Blood Cell Count", "specimen": "WHOLE_BLOOD_EDTA", "unit": "10^9/L", "reference_range": "4.0-10.0"},
+    {"code": "RBC", "name": "Red Blood Cell Count", "specimen": "WHOLE_BLOOD_EDTA", "unit": "10^12/L", "reference_range": "4.2-5.9"},
+    {"code": "HGB", "name": "Hemoglobin", "specimen": "WHOLE_BLOOD_EDTA", "unit": "g/dL", "reference_range": "12.0-17.5"},
+    {"code": "HCT", "name": "Hematocrit", "specimen": "WHOLE_BLOOD_EDTA", "unit": "%", "reference_range": "36-52"},
+    {"code": "PLT", "name": "Platelet Count", "specimen": "WHOLE_BLOOD_EDTA", "unit": "10^9/L", "reference_range": "150-400"}
+  ],
+  "metadata": {"analyzer_type": "hematology", "description": "Synthetic CBC panel"}
+}

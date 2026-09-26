@@ -1,0 +1,13 @@
+{
+  "sample_identifier": "SAMPLE-IMMUNO-001",
+  "order_number": "ORDER-SYNTH-004",
+  "accession_number": "ACCESSION-IMMUNO-001",
+  "patient_id": "PATIENT-SYNTH-004",
+  "patient_name": "Synthetic Patient Four",
+  "specimen": "SERUM",
+  "ordered_tests": [
+    {"code": "TSH", "name": "Thyroid Stimulating Hormone", "specimen": "SERUM", "unit": "mIU/L", "reference_range": "0.4-4.0"},
+    {"code": "FT4", "name": "Free Thyroxine", "specimen": "SERUM", "unit": "ng/dL", "reference_range": "0.8-1.8"}
+  ],
+  "metadata": {"analyzer_type": "immunoassay", "description": "Synthetic thyroid panel"}
+}

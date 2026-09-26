@@ -1,0 +1,12 @@
+{
+  "id": "generic-analyzers",
+  "name": "Generic analyzer catalog",
+  "analyzers": [
+    {"id": "generic-hematology", "name": "Generic hematology analyzer", "type": "hematology", "protocols": ["hl7-mllp"]},
+    {"id": "generic-chemistry", "name": "Generic chemistry analyzer", "type": "chemistry", "protocols": ["hl7-mllp"]},
+    {"id": "generic-coagulation", "name": "Generic coagulation analyzer", "type": "coagulation", "protocols": ["hl7-mllp"]},
+    {"id": "generic-immunoassay", "name": "Generic immunoassay analyzer", "type": "immunoassay", "protocols": ["hl7-mllp"]},
+    {"id": "generic-urinalysis", "name": "Generic urinalysis analyzer", "type": "urinalysis", "protocols": ["hl7-mllp"]},
+    {"id": "generic-blood-gas", "name": "Generic blood-gas analyzer", "type": "blood-gas", "protocols": ["hl7-mllp"]}
+  ]
+}

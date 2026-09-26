@@ -1,0 +1,14 @@
+{
+  "id": "cbc-abnormal",
+  "name": "CBC - abnormal flags",
+  "analyzer_type": "hematology",
+  "processing_seconds": 0.2,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "WBC": {"type": "fixed", "value": "15.2", "units": "10^9/L", "reference_range": "4.0-10.0", "abnormal_flag": "H"},
+    "RBC": {"type": "fixed", "value": "3.8", "units": "10^12/L", "reference_range": "4.2-5.9", "abnormal_flag": "L"},
+    "HGB": {"type": "fixed", "value": "10.4", "units": "g/dL", "reference_range": "12.0-17.5", "abnormal_flag": "L"},
+    "HCT": {"type": "fixed", "value": "31.0", "units": "%", "reference_range": "36-52", "abnormal_flag": "L"},
+    "PLT": {"type": "fixed", "value": "510", "units": "10^9/L", "reference_range": "150-400", "abnormal_flag": "H"}
+  }
+}

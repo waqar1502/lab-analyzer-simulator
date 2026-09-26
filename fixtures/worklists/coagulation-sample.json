@@ -1,0 +1,14 @@
+{
+  "sample_identifier": "SAMPLE-COAG-001",
+  "order_number": "ORDER-SYNTH-003",
+  "accession_number": "ACCESSION-COAG-001",
+  "patient_id": "PATIENT-SYNTH-003",
+  "patient_name": "Synthetic Patient Three",
+  "specimen": "CITRATED_PLASMA",
+  "ordered_tests": [
+    {"code": "PT", "name": "Prothrombin Time", "specimen": "CITRATED_PLASMA", "unit": "s", "reference_range": "11-14"},
+    {"code": "INR", "name": "International Normalized Ratio", "specimen": "CITRATED_PLASMA", "unit": "ratio", "reference_range": "0.8-1.2"},
+    {"code": "APTT", "name": "Activated Partial Thromboplastin Time", "specimen": "CITRATED_PLASMA", "unit": "s", "reference_range": "25-35"}
+  ],
+  "metadata": {"analyzer_type": "coagulation", "description": "Synthetic coagulation panel"}
+}

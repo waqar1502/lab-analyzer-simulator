@@ -1,0 +1,11 @@
+.git
+.github
+.pytest_cache
+.ruff_cache
+.venv
+venv
+__pycache__
+*.pyc
+tests
+docs/development.md
+generated

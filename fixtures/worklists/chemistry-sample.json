@@ -1,0 +1,15 @@
+{
+  "sample_identifier": "SAMPLE-CHEM-001",
+  "order_number": "ORDER-SYNTH-002",
+  "accession_number": "ACCESSION-CHEM-001",
+  "patient_id": "PATIENT-SYNTH-002",
+  "patient_name": "Synthetic Patient Two",
+  "specimen": "SERUM",
+  "ordered_tests": [
+    {"code": "GLU", "name": "Glucose", "specimen": "SERUM", "unit": "mg/dL", "reference_range": "70-99"},
+    {"code": "CREA", "name": "Creatinine", "specimen": "SERUM", "unit": "mg/dL", "reference_range": "0.6-1.3"},
+    {"code": "ALT", "name": "Alanine Aminotransferase", "specimen": "SERUM", "unit": "U/L", "reference_range": "7-56"},
+    {"code": "AST", "name": "Aspartate Aminotransferase", "specimen": "SERUM", "unit": "U/L", "reference_range": "10-40"}
+  ],
+  "metadata": {"analyzer_type": "chemistry", "description": "Synthetic basic chemistry panel"}
+}

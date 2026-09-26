@@ -1,0 +1,13 @@
+{
+  "id": "urinalysis-normal",
+  "name": "Urinalysis - normal screen",
+  "analyzer_type": "urinalysis",
+  "processing_seconds": 0.2,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "U-PH": {"type": "range", "min": 5.5, "max": 7.5, "decimals": 1, "units": "pH", "reference_range": "5.0-8.0"},
+    "U-PRO": {"type": "choice", "values": ["NEGATIVE"], "reference_range": "NEGATIVE"},
+    "U-GLU": {"type": "choice", "values": ["NEGATIVE"], "reference_range": "NEGATIVE"},
+    "U-BLD": {"type": "choice", "values": ["NEGATIVE"], "reference_range": "NEGATIVE"}
+  }
+}

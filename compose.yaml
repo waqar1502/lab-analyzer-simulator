@@ -1,0 +1,17 @@
+services:
+  lab-analyzer-simulator:
+    build:
+      context: .
+    image: lab-analyzer-simulator:local
+    ports:
+      - "8000:8000"
+    environment:
+      LAB_SIM_MODE: ${LAB_SIM_MODE:-fixture}
+      LAB_SIM_GATEWAY_HOST: ${LAB_SIM_GATEWAY_HOST:-host.docker.internal}
+      LAB_SIM_GATEWAY_PORT: ${LAB_SIM_GATEWAY_PORT:-2575}
+      LAB_SIM_RANDOM_SEED: ${LAB_SIM_RANDOM_SEED:-42}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

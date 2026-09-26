@@ -1,0 +1,15 @@
+{
+  "sample_identifier": "SAMPLE-BG-001",
+  "order_number": "ORDER-SYNTH-006",
+  "accession_number": "ACCESSION-BG-001",
+  "patient_id": "PATIENT-SYNTH-006",
+  "patient_name": "Synthetic Patient Six",
+  "specimen": "ARTERIAL_BLOOD",
+  "ordered_tests": [
+    {"code": "pH", "name": "Blood pH", "specimen": "ARTERIAL_BLOOD", "unit": "pH", "reference_range": "7.35-7.45"},
+    {"code": "pCO2", "name": "Partial Pressure CO2", "specimen": "ARTERIAL_BLOOD", "unit": "mmHg", "reference_range": "35-45"},
+    {"code": "pO2", "name": "Partial Pressure O2", "specimen": "ARTERIAL_BLOOD", "unit": "mmHg", "reference_range": "80-100"},
+    {"code": "LAC", "name": "Lactate", "specimen": "ARTERIAL_BLOOD", "unit": "mmol/L", "reference_range": "0.5-2.2"}
+  ],
+  "metadata": {"analyzer_type": "blood-gas", "description": "Synthetic arterial blood gas panel"}
+}

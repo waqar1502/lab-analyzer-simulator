@@ -1,0 +1,15 @@
+{
+  "sample_identifier": "SAMPLE-URINE-001",
+  "order_number": "ORDER-SYNTH-005",
+  "accession_number": "ACCESSION-URINE-001",
+  "patient_id": "PATIENT-SYNTH-005",
+  "patient_name": "Synthetic Patient Five",
+  "specimen": "URINE",
+  "ordered_tests": [
+    {"code": "U-PH", "name": "Urine pH", "specimen": "URINE", "unit": "pH", "reference_range": "5.0-8.0"},
+    {"code": "U-PRO", "name": "Urine Protein", "specimen": "URINE", "unit": "", "reference_range": "NEGATIVE", "value_type": "CE"},
+    {"code": "U-GLU", "name": "Urine Glucose", "specimen": "URINE", "unit": "", "reference_range": "NEGATIVE", "value_type": "CE"},
+    {"code": "U-BLD", "name": "Urine Blood", "specimen": "URINE", "unit": "", "reference_range": "NEGATIVE", "value_type": "CE"}
+  ],
+  "metadata": {"analyzer_type": "urinalysis", "description": "Synthetic urine screen"}
+}

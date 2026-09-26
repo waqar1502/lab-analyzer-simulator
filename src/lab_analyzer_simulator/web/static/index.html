@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab Analyzer Simulator</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f4f7fb; color: #17324d; }
+    body { margin: 0; } main { max-width: 1180px; margin: 0 auto; padding: 28px 18px; }
+    header, section { background: white; border: 1px solid #d6e1ec; border-radius: 12px; padding: 22px; margin-bottom: 18px; box-shadow: 0 4px 18px #17324d12; }
+    h1 { margin: 0 0 4px; } h2 { margin-top: 0; } .muted { color: #58728b; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    label { display: block; font-weight: 650; } input, select, button { width: 100%; box-sizing: border-box; padding: 11px; margin-top: 6px; border: 1px solid #b8cada; border-radius: 7px; font: inherit; }
+    button { cursor: pointer; background: #146ec1; color: white; border: 0; font-weight: 700; } button.secondary { background: #657b8f; } button.green { background: #198754; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; } .actions button { width: auto; min-width: 150px; }
+    .status { background: #eef8f2; border: 1px solid #b8dfc8; padding: 14px; border-radius: 8px; white-space: pre-wrap; }
+    pre { background: #11283b; color: #e2f1ff; padding: 16px; border-radius: 8px; overflow: auto; max-height: 340px; }
+    .warning { color: #7a4b00; background: #fff7df; border: 1px solid #edd18a; padding: 12px; border-radius: 8px; }
+  </style>
+</head>
+<body><main>
+  <header><h1>Lab Analyzer Simulator</h1><div class="muted">Generic synthetic laboratory analyzer for HL7/MLLP integration testing.</div></header>
+  <section><h2>Scan and query a worklist</h2>
+    <div class="grid"><label>Sample barcode / QR value<select id="sample"></select></label>
+      <label>Result profile<select id="profile"></select></label>
+      <label>Scenario<select id="scenario"><option>normal</option><option>unknown-sample</option><option>duplicate</option><option>timeout</option><option>delayed-ack</option><option>malformed-mllp</option><option>malformed-hl7</option><option>no-ack</option><option>nak</option><option>reject-ack</option><option>reset</option><option>unavailable</option><option>bad-id</option><option>oversized</option><option>unexpected-response</option><option>invalid-encoding</option><option>disconnect</option></select></label></div>
+    <div class="actions"><button onclick="querySample()">Scan and query worklist</button><button class="green" onclick="runProfile()">Run selected profile</button><button class="secondary" onclick="refresh()">Refresh</button><button class="secondary" onclick="resetSimulator()">Reset</button></div>
+    <p class="warning">Fixture mode uses only synthetic worklists and never creates orders. Live mode sends HL7/MLLP to the configured host.</p>
+    <div id="worklist" class="status">Loading simulator status…</div>
+  </section>
+  <section><h2>Protocol console</h2><pre id="console">No messages yet.</pre></section>
+  <section><h2>Recent runs</h2><pre id="runs">No runs yet.</pre></section>
+  <script>
+    const $ = id => document.getElementById(id);
+    async function api(path, options) { const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options}); const data = await response.json(); if (!response.ok) throw new Error(data.error || response.statusText); return data; }
+    function renderStatus(data) { const w = data.worklist; $('worklist').textContent = `Mode: ${data.mode}\nState: ${data.state}${data.failure ? `\nFailure: ${data.failure}` : ''}\nProgress: ${data.progress}%` + (w ? `\n\nOrder: ${w.order_number}\nPatient: ${w.patient_name}\nSample: ${w.sample_identifier}\nTests: ${w.ordered_tests.map(t => t.code + ' — ' + t.name).join(', ')}` : '\n\nNo worklist loaded.'); }
+    async function refresh() { const data = await api('/api/status'); $('sample').innerHTML = data.available_samples.map(x => `<option>${x}</option>`).join(''); $('profile').innerHTML = data.available_profiles.map(x => `<option value="${x.id}">${x.name} (${x.analyzer_type})</option>`).join(''); renderStatus(data); const messages = await api('/api/messages'); $('console').textContent = messages.items.length ? messages.items.map(x => `[${x.direction} ${x.kind}]\n${x.message}`).join('\n\n') : 'No messages yet.'; const runs = await api('/api/runs'); $('runs').textContent = runs.items.length ? JSON.stringify(runs.items, null, 2) : 'No runs yet.'; }
+    async function querySample() { try { const data = await api('/api/query', {method:'POST', body:JSON.stringify({sample_identifier:$('sample').value, scenario_id:$('scenario').value})}); renderStatus(data.status); await refresh(); } catch (e) { alert(e.message); await refresh(); } }
+    async function runProfile() { try { const data = await api('/api/run', {method:'POST', body:JSON.stringify({sample_identifier:$('sample').value, profile_id:$('profile').value, scenario_id:$('scenario').value})}); renderStatus(data.status); await refresh(); } catch (e) { alert(e.message); await refresh(); } }
+    async function resetSimulator() { await api('/api/reset', {method:'POST', body:'{}'}); await refresh(); }
+    refresh().catch(e => { $('worklist').textContent = e.message; });
+  </script>
+</main></body></html>

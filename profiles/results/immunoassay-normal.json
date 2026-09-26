@@ -1,0 +1,11 @@
+{
+  "id": "immunoassay-normal",
+  "name": "Immunoassay - normal range",
+  "analyzer_type": "immunoassay",
+  "processing_seconds": 0.2,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "TSH": {"type": "range", "min": 0.8, "max": 3.2, "decimals": 2, "units": "mIU/L", "reference_range": "0.4-4.0"},
+    "FT4": {"type": "range", "min": 1.0, "max": 1.6, "decimals": 2, "units": "ng/dL", "reference_range": "0.8-1.8"}
+  }
+}
