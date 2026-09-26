@@ -1,8 +1,8 @@
-# MedixGrid-style HL7/MLLP example
+# Generic HL7/MLLP host example
 
-This directory is only an integration example. It is not required by the simulator and contains no CareGrid source, database access, tenant/facility data, credentials, or production addresses.
+This directory is only an integration example. It is not required by the simulator and contains no application source, database access, tenant/facility data, credentials, or production addresses.
 
-To point a local test deployment at an approved MedixGrid-compatible MLLP listener, use environment variables in a local, uncommitted override:
+To point a local test deployment at an approved HL7/MLLP listener, use environment variables in a local, uncommitted override:
 
 ```text
 LAB_SIM_MODE=live

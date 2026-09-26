@@ -1,6 +1,6 @@
 # Standalone Lab Analyzer Simulator
 
-This repository is intentionally independent from the MedixGrid/CareGrid application.
+This repository is intentionally independent from any application-specific implementation.
 
 ## Scope
 
