@@ -127,6 +127,24 @@ class Hl7Protocol:
                     "specimen": self._field(obr, 15) or "SERUM",
                 }
             )
+        dsp_values: dict[str, str] = {}
+        for dsp in (item for item in segments if item[0] == "DSP"):
+            key = self._field(dsp, 1)
+            value = self._field(dsp, 3)
+            if key:
+                dsp_values[key] = value
+        if dsp_values.get("1"):
+            order = dsp_values["1"]
+            sample = requested_sample or dsp_values.get("2") or sample
+            accession = dsp_values.get("3") or sample
+            patient_name = dsp_values.get("4") or patient_name
+            patient_id = dsp_values.get("5") or patient_id
+            encoded_tests = dsp_values.get("7", "")
+            for encoded_test in encoded_tests.split("~"):
+                parts = encoded_test.split("^")
+                code = parts[2].strip() if len(parts) > 2 and parts[2].strip() else parts[0].strip()
+                if code:
+                    tests.append({"code": code, "name": parts[3].strip() if len(parts) > 3 and parts[3].strip() else code, "specimen": "SERUM"})
         if not tests:
             for dsp in (item for item in segments if item[0] == "DSP"):
                 text = self._field(dsp, 3)
@@ -191,4 +209,3 @@ class Hl7Protocol:
                 f"MSA|{code}|{control_id}|{text}",
             ]
         ) + "\r"
-

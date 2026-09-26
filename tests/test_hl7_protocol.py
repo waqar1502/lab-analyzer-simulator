@@ -52,6 +52,25 @@ class Hl7ProtocolTests(unittest.TestCase):
         self.assertEqual("Synthetic Patient", worklist.patient_name)
         self.assertEqual("HGB", worklist.ordered_tests[0].code)
 
+    def test_dsp_worklist_parser_reads_the_common_query_response_shape(self) -> None:
+        response = "\r".join(
+            [
+                "MSH|^~\\&|HOST|LAB|SIM|SIM|20260101000000||DSR^Q03|1|P|2.5",
+                "MSA|AA|QRY-1|Accepted",
+                "DSP|1||ORDER-2",
+                "DSP|2||SAMPLE-CBC-001",
+                "DSP|3||ACCESSION-2",
+                "DSP|4||Synthetic Patient",
+                "DSP|5||PATIENT-2",
+                "DSP|7||PANEL^CBC^WBC^White Blood Cell~PANEL^CBC^HGB^Hemoglobin",
+                "",
+            ]
+        )
+        worklist = self.protocol.parse_worklist(response)
+        self.assertEqual("ORDER-2", worklist.order_number)
+        self.assertEqual("SAMPLE-CBC-001", worklist.sample_identifier)
+        self.assertEqual(["WBC", "HGB"], [test.code for test in worklist.ordered_tests])
+
 
 if __name__ == "__main__":
     unittest.main()
