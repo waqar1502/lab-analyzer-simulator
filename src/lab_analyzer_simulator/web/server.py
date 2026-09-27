@@ -50,6 +50,10 @@ def create_server(engine: SimulationEngine, host: str, port: int) -> SimulatorHt
                 self._json(200, {"items": engine.messages_snapshot()})
             elif path == "/api/runs":
                 self._json(200, {"items": engine.runs_snapshot()})
+            elif path.startswith("/api/runs/"):
+                run_id = path.removeprefix("/api/runs/")
+                run = engine.run_snapshot(run_id)
+                self._json(200 if run else 404, {"run": run} if run else {"error": "run_not_found"})
             elif path in {"/", "/index.html"}:
                 self._static("index.html", "text/html; charset=utf-8")
             else:
@@ -60,21 +64,22 @@ def create_server(engine: SimulationEngine, host: str, port: int) -> SimulatorHt
             try:
                 body = self._body()
                 if path == "/api/query":
-                    worklist = engine.query(str(body.get("sample_identifier", "")), str(body.get("scenario_id", "normal")))
+                    worklist = engine.query(str(body.get("sample_identifier", "")), body.get("scenario_id"))
                     self._json(200, {"worklist": engine._worklist_dict(worklist), "status": engine.status()})
                 elif path == "/api/run":
-                    run = engine.run(
+                    run = engine.start_run(
                         profile_id=str(body.get("profile_id", "cbc-normal")),
                         sample_identifier=body.get("sample_identifier"),
-                        scenario_id=str(body.get("scenario_id", "normal")),
+                        scenario_id=body.get("scenario_id"),
                     )
-                    self._json(200, {"run": self._run_dict(run), "status": engine.status()})
+                    self._json(202, {"run": self._run_dict(run), "status": engine.status()})
                 elif path == "/api/scenario":
-                    scenario_id = str(body.get("scenario_id", "normal"))
-                    allowed = {"normal", "unknown-sample", "duplicate", "timeout", "delayed-ack", "malformed-mllp", "malformed-hl7", "no-ack", "nak", "reject-ack", "reset", "unavailable", "bad-id", "oversized", "unexpected-response", "invalid-encoding", "disconnect"}
-                    if scenario_id not in allowed:
-                        raise ValueError(f"unknown scenario: {scenario_id}")
-                    self._json(200, {"scenario_id": scenario_id, "message": "Scenario selected for the next operation."})
+                    scenario_id = engine.set_scenario(str(body.get("scenario_id", "normal")))
+                    self._json(200, {"scenario_id": scenario_id, "status": engine.status()})
+                elif path == "/api/protocol":
+                    protocol_id = str(body.get("protocol", "hl7"))
+                    engine.set_protocol(protocol_id)
+                    self._json(200, engine.status())
                 elif path == "/api/reset":
                     engine.reset()
                     self._json(200, engine.status())

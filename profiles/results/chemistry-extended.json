@@ -1,0 +1,10 @@
+{
+  "id": "chemistry-extended",
+  "name": "Chemistry - comprehensive panels",
+  "analyzer_type": "chemistry",
+  "processing_seconds": 0.5,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "GLU": {"type": "range", "min": 75, "max": 95, "decimals": 0, "units": "mg/dL"}, "BUN": {"type": "range", "min": 8, "max": 22, "decimals": 0, "units": "mg/dL"}, "CREA": {"type": "range", "min": 0.7, "max": 1.1, "decimals": 2, "units": "mg/dL"}, "ALT": {"type": "range", "min": 12, "max": 38, "decimals": 0, "units": "U/L"}, "AST": {"type": "range", "min": 12, "max": 35, "decimals": 0, "units": "U/L"}, "ALP": {"type": "range", "min": 45, "max": 120, "decimals": 0, "units": "U/L"}, "NA": {"type": "range", "min": 136, "max": 145, "decimals": 0, "units": "mmol/L"}, "K": {"type": "range", "min": 3.6, "max": 4.8, "decimals": 1, "units": "mmol/L"}, "CL": {"type": "range", "min": 98, "max": 107, "decimals": 0, "units": "mmol/L"}, "CHOL": {"type": "range", "min": 140, "max": 200, "decimals": 0, "units": "mg/dL"}, "HDL": {"type": "range", "min": 45, "max": 80, "decimals": 0, "units": "mg/dL"}, "LDL": {"type": "range", "min": 70, "max": 130, "decimals": 0, "units": "mg/dL"}, "TG": {"type": "range", "min": 60, "max": 150, "decimals": 0, "units": "mg/dL"}
+  }
+}

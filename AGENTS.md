@@ -22,4 +22,4 @@ This repository is intentionally independent from any application-specific imple
 
 - The primary product name is **Lab Analyzer Simulator**.
 - Customer-specific integrations belong under `examples/integrations/` and must use placeholders.
-- ASTM is planned only until an implementation and tests are added; never claim it is supported early.
+- ASTM is supported only through the documented generic profile and tested ASTM session adapter; never claim vendor/device compatibility without verified testing.

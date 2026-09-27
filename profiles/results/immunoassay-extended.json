@@ -1,0 +1,10 @@
+{
+  "id": "immunoassay-extended",
+  "name": "Immunoassay - common tests",
+  "analyzer_type": "immunoassay",
+  "processing_seconds": 0.5,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "TSH": {"type": "range", "min": 0.8, "max": 3.2, "decimals": 2, "units": "mIU/L"}, "FT4": {"type": "range", "min": 1, "max": 1.6, "decimals": 2, "units": "ng/dL"}, "TROP": {"type": "range", "min": 0, "max": 14, "decimals": 1, "units": "ng/L"}, "FERR": {"type": "range", "min": 30, "max": 300, "decimals": 0, "units": "ng/mL"}, "VITD": {"type": "range", "min": 30, "max": 70, "decimals": 1, "units": "ng/mL"}, "B12": {"type": "range", "min": 250, "max": 800, "decimals": 0, "units": "pg/mL"}, "BHCG": {"type": "range", "min": 0, "max": 5, "decimals": 1, "units": "mIU/mL"}, "PSA": {"type": "range", "min": 0, "max": 4, "decimals": 2, "units": "ng/mL"}
+  }
+}

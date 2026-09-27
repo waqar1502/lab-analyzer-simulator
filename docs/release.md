@@ -7,4 +7,5 @@
 - Publish only from a protected version tag to the intended GitHub Container Registry namespace.
 - Record the immutable image digest and generated build attestation.
 - Smoke-test `/healthz`, `/readyz`, the fixture flow, and one approved live-host flow.
+- Smoke-test both `SIMULATOR_PROTOCOL=hl7` and `SIMULATOR_PROTOCOL=astm` using the same image.
 - Report any unimplemented protocol or scenario rather than implying support.

@@ -7,9 +7,13 @@ services:
       - "8000:8000"
     environment:
       LAB_SIM_MODE: ${LAB_SIM_MODE:-fixture}
+      SIMULATOR_PROTOCOL: ${SIMULATOR_PROTOCOL:-hl7}
       LAB_SIM_GATEWAY_HOST: ${LAB_SIM_GATEWAY_HOST:-host.docker.internal}
       LAB_SIM_GATEWAY_PORT: ${LAB_SIM_GATEWAY_PORT:-2575}
       LAB_SIM_RANDOM_SEED: ${LAB_SIM_RANDOM_SEED:-42}
+      LAB_SIM_ASTM_FRAME_SIZE: ${LAB_SIM_ASTM_FRAME_SIZE:-240}
+      LAB_SIM_ASTM_RETRY_COUNT: ${LAB_SIM_ASTM_RETRY_COUNT:-3}
+      LAB_SIM_ASTM_RECEIVE_TIMEOUT_SECONDS: ${LAB_SIM_ASTM_RECEIVE_TIMEOUT_SECONDS:-5}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=3)"]
       interval: 30s

@@ -1,25 +1,29 @@
 # Lab Analyzer Simulator
 
-Lab Analyzer Simulator is a standalone, open-source test instrument for laboratory integrations. It models a generic analyzer that scans a specimen identifier, obtains a worklist, generates synthetic results, and exchanges HL7 v2 messages over MLLP.
+Lab Analyzer Simulator is a standalone, open-source test instrument for laboratory integrations. It models a generic analyzer that scans a specimen identifier, obtains a worklist, generates synthetic results, and exchanges HL7 v2/MLLP or ASTM/TCP messages.
 
 It is designed for local development, integration testing, demonstrations, and protocol troubleshooting. It does not create laboratory orders, connect to a database, require a hospital application, or contain real patient information.
 
-## Features in v0.1.0
+## Features in v0.2.0
 
 - Browser control panel and REST API.
 - CLI/headless operation for automation.
 - Fixture mode for deterministic local tests without a host system.
 - Live mode for sending HL7/MLLP queries and results to a configured host.
 - HL7 v2.5 `QRY^R02`, `DSR^Q03`, `ORU^R01`, and ACK message support.
+- ASTM/LIS2-style `H`, `P`, `O`, `Q`, `R`, `C`, and `L` record support over ASTM TCP.
+- ASTM ENQ/ACK/NAK/EOT sessions, STX/ETX/ETB framing, frame numbers, checksums, retries, and multi-frame messages.
+- A protocol registry/factory so the simulation engine is independent of HL7 and ASTM details.
 - Explicit analyzer state machine with failure states.
 - Generic profiles for hematology/CBC, chemistry, coagulation, immunoassay, urinalysis, and blood gas.
 - Fixed, range, choice, percentage, and seedable random result generators.
 - Processing delay and progress reporting.
 - Fault scenarios for unknown samples, duplicate control IDs, malformed MLLP, timeout, delayed response, invalid encoding, disconnect, and rejected acknowledgements.
+- ASTM wire-fault scenarios including invalid checksum, wrong frame, duplicate frame, reset, missing EOT, contention, and invalid record sequence.
 - Docker and Docker Compose packaging.
 - Synthetic fixtures and automated unit, contract, transport, and API tests.
 
-ASTM is intentionally planned, not advertised as supported. Add it through the protocol abstraction with contract tests before claiming ASTM compatibility.
+ASTM support is generic and protocol-oriented. It is not a claim of compatibility with a particular analyzer vendor or model.
 
 The project was initiated with acknowledgement to **Mian Waqar Ali** for the original integration-testing problem and practical direction that motivated this generic simulator. The implementation is intended to remain useful beyond any one product or customer.
 
@@ -54,7 +58,14 @@ docker compose up --build
 
 Then open <http://127.0.0.1:8000>. The image runs as a non-root user and binds to localhost in the Compose example. To test a host system from a container, set `LAB_SIM_MODE=live`, `LAB_SIM_GATEWAY_HOST`, and `LAB_SIM_GATEWAY_PORT` in a local Compose override; do not commit credentials or customer addresses.
 
-## Modes
+## Protocols and modes
+
+The same fixture/result model can run through either protocol:
+
+```text
+SIMULATOR_PROTOCOL=hl7   # HL7 v2 over MLLP
+SIMULATOR_PROTOCOL=astm  # ASTM records over ASTM TCP
+```
 
 ### Fixture mode
 
@@ -76,6 +87,8 @@ LAB_SIM_RECEIVER_FACILITY=LAB
 
 The simulator uses MLLP framing: vertical-tab (`0x0B`) before the HL7 payload and file-separator/carriage-return (`0x1C 0x0D`) after it. The implementation treats a missing or malformed frame as a protocol/transport failure.
 
+For ASTM mode, the simulator performs an ENQ/ACK session, sends numbered STX frames terminated by ETB or ETX with a two-character checksum and CR/LF, waits for ACK or NAK, sends EOT, and receives the host response session for queries. See [ASTM protocol details](docs/astm.md).
+
 ## REST API
 
 | Method | Path | Purpose |
@@ -85,9 +98,11 @@ The simulator uses MLLP framing: vertical-tab (`0x0B`) before the HL7 payload an
 | GET | `/api/status` | State, failure, progress, profiles, fixtures, events |
 | GET | `/api/messages` | Recent inbound/outbound HL7 messages |
 | GET | `/api/runs` | Recent simulation runs |
+| GET | `/api/runs/{runId}` | Live state and progress for one run |
 | POST | `/api/query` | Body: `{"sample_identifier":"SAMPLE-CBC-001","scenario_id":"normal"}` |
 | POST | `/api/run` | Body: `{"sample_identifier":"SAMPLE-CBC-001","profile_id":"cbc-normal","scenario_id":"normal"}` |
 | POST | `/api/scenario` | Validate/select a scenario for client workflows |
+| POST | `/api/protocol` | Select `hl7` or `astm` |
 | POST | `/api/reset` | Reset analyzer state and in-memory history |
 
 Example:
@@ -134,6 +149,8 @@ Add a worklist JSON file under `fixtures/worklists/`. Add result generators unde
 
 All public fixtures must be synthetic. Do not add real names, medical record numbers, accession numbers, tenant/facility identifiers, credentials, or production endpoints.
 
+The catalog includes CBC normal/abnormal/critical, hematology differential/ESR, chemistry renal/liver/electrolyte/lipid, coagulation, immunoassay, urinalysis, and blood-gas examples.
+
 ## Development and verification
 
 ```bash
@@ -143,7 +160,7 @@ docker compose config
 docker build -t lab-analyzer-simulator:local .
 ```
 
-The compatibility test against a real host is intentionally separate from the default tests. Run it only in an isolated environment with an approved test endpoint; see `docs/compatibility.md`.
+The compatibility test against a real host is intentionally separate from the default tests. Run it only in an isolated environment with an approved test endpoint; see `docs/compatibility.md`. The automated ASTM fake-host integration test is part of the standard suite.
 
 ## Project boundaries and safety
 

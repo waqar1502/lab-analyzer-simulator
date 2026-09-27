@@ -1,0 +1,5 @@
+{
+  "sample_identifier":"SAMPLE-CHEM-EXT-001","order_number":"ORDER-SYNTH-102","accession_number":"ACCESSION-CHEM-EXT-001","patient_id":"PATIENT-SYNTH-102","patient_name":"Synthetic Chemistry Patient","specimen":"SERUM",
+  "ordered_tests":[{"code":"GLU","name":"Glucose"},{"code":"BUN","name":"Blood Urea Nitrogen"},{"code":"CREA","name":"Creatinine"},{"code":"ALT","name":"Alanine Aminotransferase"},{"code":"AST","name":"Aspartate Aminotransferase"},{"code":"NA","name":"Sodium"},{"code":"K","name":"Potassium"},{"code":"CL","name":"Chloride"},{"code":"CHOL","name":"Total Cholesterol"},{"code":"HDL","name":"HDL Cholesterol"},{"code":"LDL","name":"LDL Cholesterol"},{"code":"TG","name":"Triglycerides"}],
+  "metadata":{"analyzer_type":"chemistry","description":"Synthetic renal, liver, electrolyte, and lipid panels"}
+}

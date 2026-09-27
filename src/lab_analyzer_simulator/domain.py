@@ -104,6 +104,9 @@ class SimulationRun:
     error: str | None = None
     created_at: str = ""
     completed_at: str | None = None
+    current_test: str | None = None
+    elapsed_seconds: float = 0.0
+    protocol: str = "hl7"
 
 
 @dataclass(slots=True, frozen=True)
@@ -119,6 +122,8 @@ class ResultProfile:
 @dataclass(slots=True, frozen=True)
 class Settings:
     mode: str = "fixture"
+    protocol: str = "hl7"
+    analyzer_name: str = "Generic Analyzer"
     bind_host: str = "127.0.0.1"
     web_port: int = 8000
     gateway_host: str = "127.0.0.1"
@@ -133,4 +138,7 @@ class Settings:
     read_timeout_seconds: float = 5.0
     max_message_bytes: int = 1_000_000
     random_seed: int | None = 42
-
+    astm_frame_size: int = 240
+    astm_retry_count: int = 3
+    astm_checksum: bool = True
+    astm_receive_timeout_seconds: float = 5.0

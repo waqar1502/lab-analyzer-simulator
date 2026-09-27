@@ -1,0 +1,8 @@
+{
+  "id": "generic-hematology-astm",
+  "name": "Generic hematology analyzer over ASTM",
+  "family": "hematology",
+  "protocol": "astm",
+  "transport": "tcp",
+  "hostQuery": true
+}

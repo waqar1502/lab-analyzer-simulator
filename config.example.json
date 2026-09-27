@@ -1,0 +1,22 @@
+{
+  "mode": "fixture",
+  "analyzer": {
+    "name": "Generic hematology analyzer"
+  },
+  "protocol": {
+    "type": "astm"
+  },
+  "transport": {
+    "type": "tcp",
+    "host": "127.0.0.1",
+    "port": 5000,
+    "timeout_seconds": 5
+  },
+  "astm": {
+    "query_mode": true,
+    "frame_size": 240,
+    "retry_count": 3,
+    "checksum": true,
+    "receive_timeout_seconds": 5
+  }
+}

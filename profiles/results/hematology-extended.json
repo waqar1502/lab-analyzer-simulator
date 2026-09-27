@@ -1,0 +1,10 @@
+{
+  "id": "hematology-extended",
+  "name": "Hematology - 5 part and ESR",
+  "analyzer_type": "hematology",
+  "processing_seconds": 0.5,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "WBC": {"type": "range", "min": 5, "max": 9, "decimals": 1, "units": "10^9/L"}, "RBC": {"type": "range", "min": 4.4, "max": 5.5, "decimals": 2, "units": "10^12/L"}, "HGB": {"type": "range", "min": 13, "max": 17, "decimals": 1, "units": "g/dL"}, "HCT": {"type": "range", "min": 40, "max": 50, "decimals": 1, "units": "%"}, "MCV": {"type": "range", "min": 80, "max": 96, "decimals": 1, "units": "fL"}, "MCH": {"type": "range", "min": 27, "max": 33, "decimals": 1, "units": "pg"}, "MCHC": {"type": "range", "min": 31, "max": 36, "decimals": 1, "units": "g/dL"}, "PLT": {"type": "range", "min": 180, "max": 320, "decimals": 0, "units": "10^9/L"}, "NEUT": {"type": "percentage", "min": 40, "max": 75, "decimals": 1, "units": "%"}, "LYMPH": {"type": "percentage", "min": 20, "max": 50, "decimals": 1, "units": "%"}, "MONO": {"type": "percentage", "min": 2, "max": 10, "decimals": 1, "units": "%"}, "EOS": {"type": "percentage", "min": 1, "max": 6, "decimals": 1, "units": "%"}, "BASO": {"type": "percentage", "min": 0, "max": 2, "decimals": 1, "units": "%"}, "ESR": {"type": "range", "min": 2, "max": 20, "decimals": 0, "units": "mm/hr"}
+  }
+}

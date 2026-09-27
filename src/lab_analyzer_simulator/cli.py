@@ -15,6 +15,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Standalone HL7/MLLP laboratory analyzer simulator")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project root containing profiles/ and fixtures/")
     parser.add_argument("--config", type=Path, help="optional JSON configuration file")
+    parser.add_argument("--protocol", choices=("hl7", "astm"), help="override configured protocol")
     parser.add_argument("--version", action="version", version=__version__)
     commands = parser.add_subparsers(dest="command", required=True)
     web = commands.add_parser("web", help="start the browser control panel and REST API")
@@ -35,6 +36,8 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     settings = load_settings(args.config)
     engine = SimulationEngine(args.root, settings)
+    if args.protocol:
+        engine.set_protocol(args.protocol)
     if args.command == "validate":
         errors = engine.catalog.validate()
         if errors:

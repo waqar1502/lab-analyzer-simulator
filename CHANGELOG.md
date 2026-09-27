@@ -1,10 +1,13 @@
 # Changelog
 
-## 0.1.0 - 2026-09-27
+## 0.2.0 - 2026-09-27
 
 - Initial standalone project.
 - HL7 v2.5 over MLLP query, result, and ACK flow.
+- ASTM record adapter and real ASTM TCP session/framing implementation.
+- Protocol registry/factory, asynchronous run polling, persisted scenario selection, and optional browser camera scanning.
+- CBC critical and extended multi-discipline profiles.
+- ASTM fake-host wire-level tests and optional browser E2E tests.
 - Fixture and live modes.
 - Generic analyzer profiles and synthetic worklists.
 - Browser UI, REST API, CLI, fault scenarios, Docker packaging, and tests.
-- ASTM remains planned and is not implemented.

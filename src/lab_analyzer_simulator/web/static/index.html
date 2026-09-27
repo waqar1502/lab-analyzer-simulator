@@ -1,43 +1,53 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lab Analyzer Simulator</title>
   <style>
     :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f4f7fb; color: #17324d; }
     body { margin: 0; } main { max-width: 1180px; margin: 0 auto; padding: 28px 18px; }
     header, section { background: white; border: 1px solid #d6e1ec; border-radius: 12px; padding: 22px; margin-bottom: 18px; box-shadow: 0 4px 18px #17324d12; }
     h1 { margin: 0 0 4px; } h2 { margin-top: 0; } .muted { color: #58728b; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
     label { display: block; font-weight: 650; } input, select, button { width: 100%; box-sizing: border-box; padding: 11px; margin-top: 6px; border: 1px solid #b8cada; border-radius: 7px; font: inherit; }
     button { cursor: pointer; background: #146ec1; color: white; border: 0; font-weight: 700; } button.secondary { background: #657b8f; } button.green { background: #198754; }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; } .actions button { width: auto; min-width: 150px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; } .actions button { width: auto; min-width: 145px; }
     .status { background: #eef8f2; border: 1px solid #b8dfc8; padding: 14px; border-radius: 8px; white-space: pre-wrap; }
-    pre { background: #11283b; color: #e2f1ff; padding: 16px; border-radius: 8px; overflow: auto; max-height: 340px; }
+    pre { background: #11283b; color: #e2f1ff; padding: 16px; border-radius: 8px; overflow: auto; max-height: 360px; }
     .warning { color: #7a4b00; background: #fff7df; border: 1px solid #edd18a; padding: 12px; border-radius: 8px; }
+    video { max-width: 360px; width: 100%; border-radius: 8px; margin-top: 10px; display: none; }
   </style>
 </head>
 <body><main>
-  <header><h1>Lab Analyzer Simulator</h1><div class="muted">Generic synthetic laboratory analyzer for HL7/MLLP integration testing.</div></header>
-  <section><h2>Scan and query a worklist</h2>
-    <div class="grid"><label>Sample barcode / QR value<select id="sample"></select></label>
+  <header><h1>Lab Analyzer Simulator</h1><div class="muted">Generic synthetic laboratory analyzer for HL7/MLLP and ASTM/TCP integration testing.</div></header>
+  <section><h2>Analyzer control</h2>
+    <div class="grid">
+      <label>Protocol<select id="protocol" onchange="selectProtocol()"><option value="hl7">HL7 v2 / MLLP</option><option value="astm">ASTM / TCP</option></select></label>
+      <label>Sample barcode / QR value<select id="sample"></select></label>
       <label>Result profile<select id="profile"></select></label>
-      <label>Scenario<select id="scenario"><option>normal</option><option>unknown-sample</option><option>duplicate</option><option>timeout</option><option>delayed-ack</option><option>malformed-mllp</option><option>malformed-hl7</option><option>no-ack</option><option>nak</option><option>reject-ack</option><option>reset</option><option>unavailable</option><option>bad-id</option><option>oversized</option><option>unexpected-response</option><option>invalid-encoding</option><option>disconnect</option></select></label></div>
-    <div class="actions"><button onclick="querySample()">Scan and query worklist</button><button class="green" onclick="runProfile()">Run selected profile</button><button class="secondary" onclick="refresh()">Refresh</button><button class="secondary" onclick="resetSimulator()">Reset</button></div>
-    <p class="warning">Fixture mode uses only synthetic worklists and never creates orders. Live mode sends HL7/MLLP to the configured host.</p>
+      <label>Scenario<select id="scenario"><option>normal</option><option>unknown-sample</option><option>duplicate</option><option>timeout</option><option>delayed-ack</option><option>malformed-mllp</option><option>malformed-hl7</option><option>no-ack</option><option>nak</option><option>reject-ack</option><option>reset</option><option>unavailable</option><option>bad-id</option><option>oversized</option><option>unexpected-response</option><option>invalid-encoding</option><option>disconnect</option><option>invalid-checksum</option><option>wrong-frame-number</option><option>missing-ack</option><option>duplicate-frame</option><option>corrupted-frame</option><option>oversized-frame</option><option>connection-reset-mid-frame</option><option>connection-reset-between-frames</option><option>missing-eot</option><option>unexpected-eot</option><option>enq-collision</option><option>invalid-record-sequence</option></select></label>
+    </div>
+    <div class="actions"><button onclick="querySample()">Scan and query worklist</button><button class="green" onclick="runProfile()">Run selected profile</button><button class="secondary" onclick="startCamera()">Camera scanner</button><button class="secondary" onclick="refresh()">Refresh</button><button class="secondary" onclick="resetSimulator()">Reset</button></div>
+    <video id="camera" autoplay playsinline></video>
+    <p class="warning">Fixture mode uses synthetic worklists and never creates orders. Live mode sends the selected protocol to the configured host. Use only in an isolated test environment; do not expose this service directly to the public Internet.</p>
     <div id="worklist" class="status">Loading simulator status…</div>
   </section>
-  <section><h2>Protocol console</h2><pre id="console">No messages yet.</pre></section>
+  <section><h2>Protocol developer console</h2><pre id="console">No messages yet.</pre></section>
   <section><h2>Recent runs</h2><pre id="runs">No runs yet.</pre></section>
   <script>
     const $ = id => document.getElementById(id);
+    let cameraStream = null;
     async function api(path, options) { const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options}); const data = await response.json(); if (!response.ok) throw new Error(data.error || response.statusText); return data; }
-    function renderStatus(data) { const w = data.worklist; $('worklist').textContent = `Mode: ${data.mode}\nState: ${data.state}${data.failure ? `\nFailure: ${data.failure}` : ''}\nProgress: ${data.progress}%` + (w ? `\n\nOrder: ${w.order_number}\nPatient: ${w.patient_name}\nSample: ${w.sample_identifier}\nTests: ${w.ordered_tests.map(t => t.code + ' — ' + t.name).join(', ')}` : '\n\nNo worklist loaded.'); }
-    async function refresh() { const data = await api('/api/status'); $('sample').innerHTML = data.available_samples.map(x => `<option>${x}</option>`).join(''); $('profile').innerHTML = data.available_profiles.map(x => `<option value="${x.id}">${x.name} (${x.analyzer_type})</option>`).join(''); renderStatus(data); const messages = await api('/api/messages'); $('console').textContent = messages.items.length ? messages.items.map(x => `[${x.direction} ${x.kind}]\n${x.message}`).join('\n\n') : 'No messages yet.'; const runs = await api('/api/runs'); $('runs').textContent = runs.items.length ? JSON.stringify(runs.items, null, 2) : 'No runs yet.'; }
-    async function querySample() { try { const data = await api('/api/query', {method:'POST', body:JSON.stringify({sample_identifier:$('sample').value, scenario_id:$('scenario').value})}); renderStatus(data.status); await refresh(); } catch (e) { alert(e.message); await refresh(); } }
-    async function runProfile() { try { const data = await api('/api/run', {method:'POST', body:JSON.stringify({sample_identifier:$('sample').value, profile_id:$('profile').value, scenario_id:$('scenario').value})}); renderStatus(data.status); await refresh(); } catch (e) { alert(e.message); await refresh(); } }
+    function renderStatus(data) { const w = data.worklist; const run = data.activeRun; $('worklist').textContent = `Protocol: ${data.activeProtocol}\nAnalyzer: ${data.activeAnalyzer}\nScenario: ${data.activeScenario}\nState: ${data.analyzerState}${data.failure ? `\nFailure: ${data.failure}` : ''}\nProgress: ${data.progress}%` + (run ? `\nRun: ${run.run_id}\nCurrent test: ${run.current_test || 'complete'}\nElapsed: ${Number(run.elapsed_seconds || 0).toFixed(2)} seconds` : '') + (w ? `\n\nOrder: ${w.order_number}\nPatient: ${w.patient_name}\nSample: ${w.sample_identifier}\nTests: ${w.ordered_tests.map(t => t.code + ' — ' + t.name).join(', ')}` : '\n\nNo worklist loaded.'); }
+    async function refreshConsole(protocol) { const messages = await api('/api/messages'); $('console').textContent = messages.items.length ? messages.items.map(x => `[${x.timestamp}] ${x.protocol || protocol} ${x.direction} ${x.kind}\n${x.message}`).join('\n\n') : 'No messages yet.'; return messages.items; }
+    async function refresh() { const data = await api('/api/status'); const selectedSample = $('sample').value; const selectedProfile = $('profile').value; $('protocol').value = data.activeProtocol; $('sample').innerHTML = data.available_samples.map(x => `<option>${x}</option>`).join(''); $('sample').value = data.sample_identifier || selectedSample || data.available_samples[0] || ''; $('profile').innerHTML = data.available_profiles.map(x => `<option value="${x.id}">${x.name} (${x.analyzer_type})</option>`).join(''); $('profile').value = data.activeResultProfile || selectedProfile || data.available_profiles[0]?.id || ''; $('scenario').value = data.activeScenario; renderStatus(data); await refreshConsole(data.activeProtocol); const runs = await api('/api/runs'); $('runs').textContent = runs.items.length ? JSON.stringify(runs.items, null, 2) : 'No runs yet.'; }
+    async function selectProtocol() { try { await api('/api/protocol', {method:'POST', body:JSON.stringify({protocol:$('protocol').value})}); await refresh(); } catch (e) { alert(e.message); } }
+    async function selectScenario() { await api('/api/scenario', {method:'POST', body:JSON.stringify({scenario_id:$('scenario').value})}); }
+    async function querySample() { try { await selectScenario(); const data = await api('/api/query', {method:'POST', body:JSON.stringify({sample_identifier:$('sample').value})}); renderStatus(data.status); await refresh(); } catch (e) { alert(e.message); await refresh(); } }
+    async function runProfile() { try { await selectScenario(); const data = await api('/api/run', {method:'POST', body:JSON.stringify({sample_identifier:$('sample').value, profile_id:$('profile').value})}); const runId = data.run.run_id; await pollRun(runId); } catch (e) { alert(e.message); await refresh(); } }
+    async function pollRun(runId) { for (let i=0; i<300; i++) { const data = await api('/api/runs/' + encodeURIComponent(runId)); renderStatus((await api('/api/status'))); if (['COMPLETED','FAILED'].includes(data.run.state)) { for (let attempt = 0; attempt < 10; attempt++) { if ((await refreshConsole(data.run.protocol)).length) break; await new Promise(resolve => setTimeout(resolve, 50)); } await refresh(); return; } await new Promise(resolve => setTimeout(resolve, 100)); } throw new Error('run polling timed out'); }
     async function resetSimulator() { await api('/api/reset', {method:'POST', body:'{}'}); await refresh(); }
+    async function startCamera() { if (!('BarcodeDetector' in window) || !navigator.mediaDevices?.getUserMedia) { alert('Camera barcode detection is not available in this browser. Use manual entry or a USB keyboard-wedge scanner.'); return; } if (cameraStream) { cameraStream.getTracks().forEach(track => track.stop()); cameraStream = null; $('camera').style.display = 'none'; return; } try { cameraStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}); const video = $('camera'); video.srcObject = cameraStream; video.style.display = 'block'; const detector = new BarcodeDetector(); const scan = async () => { if (!cameraStream) return; try { const codes = await detector.detect(video); if (codes.length && codes[0].rawValue) { $('sample').value = codes[0].rawValue; $('sample').dispatchEvent(new Event('change')); } } catch (_) {} requestAnimationFrame(scan); }; scan(); } catch (e) { alert('Camera access failed: ' + e.message); } }
     refresh().catch(e => { $('worklist').textContent = e.message; });
   </script>
 </main></body></html>

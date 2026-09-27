@@ -21,6 +21,10 @@ barcode -> QRY^R02 -> DSR^Q03 worklist -> processing -> ORU^R01 -> ACK
 
 The host must accept the simulator's configured sender/receiver values and return valid MLLP framing. Use the message console and `/api/messages` to troubleshoot each exchange.
 
+## ASTM fixture flow
+
+Start with `SIMULATOR_PROTOCOL=astm` or choose `ASTM / TCP` in the browser. In fixture mode the same synthetic worklist and result profile produce `H`, `P`, `O`, `R`, and `L` records. The console displays the ASTM payload; the automated fake-host tests exercise the actual ENQ/ACK/frame/EOT session.
+
 ## CLI flow
 
 ```bash

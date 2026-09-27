@@ -22,4 +22,4 @@ The simulator sends `ORU^R01` with PID, ORC, OBR, and one OBX per ordered test. 
 
 `AA` and `CA` are accepted. Other ACK codes are treated as result rejection. Missing or invalid ACK messages are transport/protocol failures.
 
-This is a focused analyzer contract, not a complete HL7 v2 implementation. Add a versioned contract test before relying on fields outside the documented message shapes.
+This is a focused analyzer contract, not a complete HL7 v2 implementation. ASTM is documented separately in `docs/astm.md`. Add a versioned contract test before relying on fields outside the documented message shapes.

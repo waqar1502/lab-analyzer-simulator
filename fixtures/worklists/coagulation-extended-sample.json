@@ -1,0 +1,5 @@
+{
+  "sample_identifier":"SAMPLE-COAG-EXT-001","order_number":"ORDER-SYNTH-103","accession_number":"ACCESSION-COAG-EXT-001","patient_id":"PATIENT-SYNTH-103","patient_name":"Synthetic Coagulation Patient","specimen":"CITRATED_PLASMA",
+  "ordered_tests":[{"code":"PT","name":"Prothrombin Time"},{"code":"INR","name":"International Normalized Ratio"},{"code":"APTT","name":"Activated Partial Thromboplastin Time"},{"code":"FIB","name":"Fibrinogen"},{"code":"D-DIMER","name":"D-Dimer"}],
+  "metadata":{"analyzer_type":"coagulation","description":"Synthetic extended coagulation panel"}
+}

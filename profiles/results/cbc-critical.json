@@ -1,0 +1,14 @@
+{
+  "id": "cbc-critical",
+  "name": "CBC - critical values",
+  "analyzer_type": "hematology",
+  "processing_seconds": 0.5,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "WBC": {"type": "fixed", "value": "1.2", "units": "10^9/L", "reference_range": "4.0-10.0", "abnormal_flag": "LL"},
+    "RBC": {"type": "fixed", "value": "2.1", "units": "10^12/L", "reference_range": "4.2-5.9", "abnormal_flag": "LL"},
+    "HGB": {"type": "fixed", "value": "5.8", "units": "g/dL", "reference_range": "12.0-17.5", "abnormal_flag": "LL"},
+    "HCT": {"type": "fixed", "value": "18.0", "units": "%", "reference_range": "36-52", "abnormal_flag": "LL"},
+    "PLT": {"type": "fixed", "value": "18", "units": "10^9/L", "reference_range": "150-400", "abnormal_flag": "LL"}
+  }
+}

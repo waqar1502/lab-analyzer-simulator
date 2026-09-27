@@ -19,4 +19,6 @@ Fault scenarios are selected in the browser or supplied as `scenario_id` in the 
 - `oversized`: send a payload beyond the configured transport limit.
 - `unexpected-response`: return an application rejection for an unexpected response test.
 
+ASTM-only wire scenarios include `invalid-checksum`, `wrong-frame-number`, `missing-ack`, `duplicate-frame`, `corrupted-frame`, `oversized-frame`, `connection-reset-mid-frame`, `connection-reset-between-frames`, `missing-eot`, `unexpected-eot`, `enq-collision`, and `invalid-record-sequence`. They alter ASTM controls, frame bytes, checksums, or session termination.
+
 Use the state and failure fields in `/api/status` to assert application behavior. A scenario is not complete until the test asserts both the failure state and the resulting wire behavior.

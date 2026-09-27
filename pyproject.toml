@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lab-analyzer-simulator"
-version = "0.1.0"
+version = "0.2.0"
 description = "A standalone, configurable HL7/MLLP laboratory analyzer simulator."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -22,6 +22,7 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.6"]
+e2e = ["playwright>=1.45"]
 
 [project.scripts]
 lab-analyzer-simulator = "lab_analyzer_simulator.cli:main"

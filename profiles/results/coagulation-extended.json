@@ -1,0 +1,10 @@
+{
+  "id": "coagulation-extended",
+  "name": "Coagulation - extended panel",
+  "analyzer_type": "coagulation",
+  "processing_seconds": 0.5,
+  "processing_jitter_seconds": 0.2,
+  "tests": {
+    "PT": {"type": "range", "min": 11.5, "max": 13.5, "decimals": 1, "units": "s"}, "INR": {"type": "range", "min": 0.9, "max": 1.1, "decimals": 2, "units": "ratio"}, "APTT": {"type": "range", "min": 26, "max": 34, "decimals": 1, "units": "s"}, "FIB": {"type": "range", "min": 200, "max": 400, "decimals": 0, "units": "mg/dL"}, "D-DIMER": {"type": "range", "min": 0, "max": 450, "decimals": 0, "units": "ng/mL FEU"}
+  }
+}

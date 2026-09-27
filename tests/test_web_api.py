@@ -1,5 +1,6 @@
 import json
 import threading
+import time
 import unittest
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -34,12 +35,22 @@ class WebApiTests(unittest.TestCase):
         with urlopen(request, timeout=3) as response:
             return json.loads(response.read())
 
+    def wait_for_run(self, run_id: str) -> dict:
+        for _ in range(30):
+            run = self.get("/api/runs/" + run_id)["run"]
+            if run["state"] in {"COMPLETED", "FAILED"}:
+                return run
+            time.sleep(0.05)
+        self.fail("run did not reach a terminal state")
+
     def test_health_status_and_run(self) -> None:
         self.assertEqual("healthy", self.get("/healthz")["status"])
         self.assertEqual("fixture", self.get("/api/status")["mode"])
         result = self.post("/api/run", {"sample_identifier": "SAMPLE-CBC-001", "profile_id": "cbc-normal"})
-        self.assertEqual("COMPLETED", result["run"]["state"])
-        self.assertEqual(5, result["run"]["result_count"])
+        self.assertIn(result["run"]["state"], {"READY", "PROCESSING", "COMPLETED"})
+        run = self.wait_for_run(result["run"]["run_id"])
+        self.assertEqual("COMPLETED", run["state"])
+        self.assertEqual(5, run["result_count"])
 
 
 if __name__ == "__main__":

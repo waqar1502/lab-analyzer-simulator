@@ -1,0 +1,5 @@
+{
+  "sample_identifier":"SAMPLE-IMMUNO-EXT-001","order_number":"ORDER-SYNTH-104","accession_number":"ACCESSION-IMMUNO-EXT-001","patient_id":"PATIENT-SYNTH-104","patient_name":"Synthetic Immunoassay Patient","specimen":"SERUM",
+  "ordered_tests":[{"code":"TSH","name":"Thyroid Stimulating Hormone"},{"code":"FT4","name":"Free Thyroxine"},{"code":"TROP","name":"Troponin"},{"code":"FERR","name":"Ferritin"},{"code":"VITD","name":"Vitamin D"},{"code":"B12","name":"Vitamin B12"},{"code":"BHCG","name":"Beta-hCG"},{"code":"PSA","name":"PSA"}],
+  "metadata":{"analyzer_type":"immunoassay","description":"Synthetic immunoassay panel"}
+}

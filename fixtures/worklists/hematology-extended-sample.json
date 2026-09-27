@@ -1,0 +1,12 @@
+{
+  "sample_identifier": "SAMPLE-HEM-EXT-001",
+  "order_number": "ORDER-SYNTH-101",
+  "accession_number": "ACCESSION-HEM-EXT-001",
+  "patient_id": "PATIENT-SYNTH-101",
+  "patient_name": "Synthetic Hematology Patient",
+  "specimen": "WHOLE_BLOOD_EDTA",
+  "ordered_tests": [
+    {"code":"WBC","name":"White Blood Cell Count","unit":"10^9/L"},{"code":"RBC","name":"Red Blood Cell Count","unit":"10^12/L"},{"code":"HGB","name":"Hemoglobin","unit":"g/dL"},{"code":"HCT","name":"Hematocrit","unit":"%"},{"code":"MCV","name":"Mean Cell Volume","unit":"fL"},{"code":"MCH","name":"Mean Cell Hemoglobin","unit":"pg"},{"code":"MCHC","name":"Mean Cell Hemoglobin Concentration","unit":"g/dL"},{"code":"PLT","name":"Platelet Count","unit":"10^9/L"},{"code":"NEUT","name":"Neutrophils","unit":"%"},{"code":"LYMPH","name":"Lymphocytes","unit":"%"},{"code":"MONO","name":"Monocytes","unit":"%"},{"code":"EOS","name":"Eosinophils","unit":"%"},{"code":"BASO","name":"Basophils","unit":"%"},{"code":"ESR","name":"Erythrocyte Sedimentation Rate","unit":"mm/hr"}
+  ],
+  "metadata": {"analyzer_type":"hematology","description":"Synthetic five-part differential and ESR panel"}
+}

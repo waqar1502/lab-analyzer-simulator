@@ -2,18 +2,21 @@ from __future__ import annotations
 
 import re
 import uuid
+from collections.abc import Iterable
 from datetime import datetime, timezone
-from typing import Iterable
 
 from ..domain import ResultValue, Settings, Worklist
+from .base import AnalyzerProtocol, AnalyzerProtocolError
 
 
-class Hl7ProtocolError(ValueError):
+class Hl7ProtocolError(AnalyzerProtocolError):
     pass
 
 
-class Hl7Protocol:
+class Hl7Protocol(AnalyzerProtocol):
     """Minimal HL7 v2.5 implementation for analyzer query/result flows."""
+
+    protocol_id = "hl7"
 
     start_block = "\x0b"
     end_block = "\x1c\x0d"
@@ -69,6 +72,9 @@ class Hl7Protocol:
         qrf = "QRF|SIMULATOR||||||"
         return "\r".join([self._msh("QRY^R02", control_id), qrd, qrf]) + "\r"
 
+    def build_query(self, sample_identifier: str, control_id: str | None = None) -> str:
+        return self.query_message(sample_identifier, control_id)
+
     def parse_segments(self, message: str) -> list[list[str]]:
         text = message.strip("\x0b\x1c\r\n")
         segments = []
@@ -81,6 +87,9 @@ class Hl7Protocol:
         if not segments or segments[0][0] != "MSH":
             raise Hl7ProtocolError("message does not start with MSH")
         return segments
+
+    def validate_message(self, message: str) -> None:
+        self.parse_segments(message)
 
     @staticmethod
     def _field(segment: list[str], number: int, default: str = "") -> str:
@@ -200,6 +209,14 @@ class Hl7Protocol:
             )
         return "\r".join(lines) + "\r", control_id
 
+    def build_result(
+        self,
+        worklist: Worklist,
+        results: Iterable[ResultValue],
+        control_id: str | None = None,
+    ) -> tuple[str, str]:
+        return self.result_message(worklist, results, control_id)
+
     @staticmethod
     def acknowledgement(control_id: str, code: str = "AA", text: str = "Accepted") -> str:
         response_id = Hl7Protocol.control_id("ACK")
@@ -209,3 +226,6 @@ class Hl7Protocol:
                 f"MSA|{code}|{control_id}|{text}",
             ]
         ) + "\r"
+
+    def parse_acknowledgement(self, message: str) -> tuple[str, str]:
+        return self.parse_ack(message)

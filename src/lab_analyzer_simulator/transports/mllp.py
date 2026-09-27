@@ -2,22 +2,15 @@ from __future__ import annotations
 
 import socket
 import time
-from dataclasses import dataclass
-
 from ..protocols.hl7 import Hl7Protocol
+from .base import AnalyzerTransport, TransportError, TransportFault
 
 
-class MllpError(ConnectionError):
+class MllpError(TransportError):
     pass
 
 
-@dataclass(slots=True, frozen=True)
-class TransportFault:
-    kind: str = "normal"
-    delay_seconds: float = 0.0
-
-
-class MllpTransport:
+class MllpTransport(AnalyzerTransport):
     def __init__(self, host: str, port: int, connect_timeout: float, read_timeout: float, max_bytes: int):
         self.host = host
         self.port = port
@@ -25,7 +18,12 @@ class MllpTransport:
         self.read_timeout = read_timeout
         self.max_bytes = max_bytes
 
-    def send(self, message: str, fault: TransportFault | None = None) -> str:
+    def exchange(
+        self,
+        message: str,
+        fault: TransportFault | None = None,
+        expect_response: bool = True,
+    ) -> str:
         fault = fault or TransportFault()
         if fault.kind == "unavailable":
             raise MllpError("simulated host unavailable")
@@ -43,6 +41,8 @@ class MllpTransport:
             with socket.create_connection((self.host, self.port), timeout=self.connect_timeout) as connection:
                 connection.settimeout(self.read_timeout)
                 connection.sendall(frame.encode("utf-8"))
+                if not expect_response:
+                    return ""
                 if fault.kind == "disconnect":
                     return ""
                 if fault.kind == "no-ack":
@@ -77,3 +77,6 @@ class MllpTransport:
         ):
             raise MllpError("response did not use valid MLLP framing")
         return data[1:-2].decode("utf-8")
+
+    def send(self, message: str, fault: TransportFault | None = None) -> str:
+        return self.exchange(message, fault, expect_response=True)
