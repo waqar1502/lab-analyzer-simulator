@@ -58,6 +58,7 @@ class Hl7Protocol(AnalyzerProtocol):
                 "",
                 "",
                 "",
+                "",
                 profile or self.settings.protocol_profile,
             ]
         )

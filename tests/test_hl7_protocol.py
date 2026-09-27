@@ -16,6 +16,28 @@ class Hl7ProtocolTests(unittest.TestCase):
         self.assertIn("SAMPLE-CBC-001", message)
         self.assertTrue(message.endswith("\r"))
 
+    def test_query_places_protocol_profile_in_msh_21(self) -> None:
+        message = self.protocol.query_message("SAMPLE-CBC-001", "QRY-TEST-001")
+        msh = message.split("\r", 1)[0].split("|")
+
+        self.assertGreaterEqual(len(msh), 21)
+        self.assertEqual(self.protocol.settings.protocol_profile, msh[20])
+
+    def test_result_places_result_profile_in_msh_21(self) -> None:
+        worklist = Worklist.from_dict(
+            {
+                "sample_identifier": "SAMPLE-1",
+                "ordered_tests": [{"code": "HGB", "name": "Hemoglobin"}],
+            }
+        )
+        message, _ = self.protocol.result_message(
+            worklist, [ResultValue("HGB", "Hemoglobin", "14.2", "g/dL", "12-17")]
+        )
+        msh = message.split("\r", 1)[0].split("|")
+
+        self.assertGreaterEqual(len(msh), 21)
+        self.assertEqual("lab.analyzer.result.v1", msh[20])
+
     def test_result_contains_one_obx_per_result_and_unique_default_id(self) -> None:
         worklist = Worklist.from_dict(
             {

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 - 2026-09-27
+
+- Fix HL7 query and result messages so the configured protocol profile is emitted in MSH-21.
+- Add regression coverage for the HL7 profile field position.
+
 ## 0.2.0 - 2026-09-27
 
 - Initial standalone project.
