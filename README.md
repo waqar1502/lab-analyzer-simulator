@@ -40,7 +40,7 @@ python -m lab_analyzer_simulator --root . validate
 python -m lab_analyzer_simulator --root . web
 ```
 
-Open <http://127.0.0.1:8000>. Select a synthetic sample, choose a result profile, and run it. The protocol console shows the generated ORU message and fixture ACK.
+Open <http://127.0.0.1:8000>. The sample control accepts a barcode/QR value typed manually, entered by a USB keyboard-wedge scanner, or detected by the camera scanner. Fixture samples appear as suggestions; they are not required in live mode.
 
 The same workflow can be run headlessly:
 
@@ -69,11 +69,11 @@ SIMULATOR_PROTOCOL=astm  # ASTM records over ASTM TCP
 
 ### Fixture mode
 
-Fixture mode is the default. The simulator looks up the scanned sample in `fixtures/worklists/`, loads the synthetic worklist, generates results, and records the HL7 conversation in memory. It returns a synthetic `AA` ACK after generating the result. No host or database is required.
+Fixture mode is the default. The simulator looks up the entered/scanned sample in `fixtures/worklists/`, loads the synthetic worklist, generates results, and records the HL7 conversation in memory. It returns a synthetic `AA` ACK after generating the result. No host or database is required. The fixture catalog is only for local protocol tests.
 
 ### Live mode
 
-Live mode sends a `QRY^R02` request to the configured MLLP host. It parses the `DSR^Q03` response, generates results for the returned tests, sends `ORU^R01`, and validates the returned ACK. Configure it with environment variables:
+Live mode sends a `QRY^R02` request containing the exact entered/scanned specimen barcode to the configured MLLP host. The host must resolve that barcode to a real pending worklist. The simulator does not create orders or require the order number. It parses the `DSR^Q03` response, generates fake results for the returned tests, sends `ORU^R01` against the returned order/accession, and validates the returned ACK. Configure it with environment variables:
 
 ```text
 LAB_SIM_MODE=live

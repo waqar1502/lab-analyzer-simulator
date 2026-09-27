@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 - 2026-09-27
+
+- Allow manual entry and scanner input for arbitrary live specimen barcodes.
+- Keep fixture samples available as datalist suggestions for local tests.
+- Document the difference between fixture samples and real live worklists.
+
 ## 0.2.1 - 2026-09-27
 
 - Fix HL7 query and result messages so the configured protocol profile is emitted in MSH-21.

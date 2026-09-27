@@ -27,7 +27,7 @@ class BrowserE2ETests(unittest.TestCase):
                 browser = playwright.chromium.launch(headless=True)
                 page = browser.new_page()
                 page.goto(f"http://127.0.0.1:{server.server_port}")
-                page.select_option("#sample", "SAMPLE-CBC-001")
+                page.fill("#sample", "SAMPLE-CBC-001")
                 page.select_option("#profile", "cbc-normal")
                 page.click("text=Scan and query worklist")
                 page.wait_for_function("document.querySelector('#worklist').textContent.includes('ORDER-SYNTH-001')")

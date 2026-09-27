@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lab-analyzer-simulator"
-version = "0.2.1"
+version = "0.2.2"
 description = "A standalone, configurable HL7/MLLP laboratory analyzer simulator."
 readme = "README.md"
 requires-python = ">=3.12"
